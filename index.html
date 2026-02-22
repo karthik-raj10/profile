@@ -1,536 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Personal Portfolio - Eppepally Karthik Raj</title>
-  <style>
-    /* Reset */
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #000; /* black background */
-      color: #eee;
-      min-height: 100vh;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      position: relative;
-      perspective: 1000px; /* for 3D effect */
-      cursor: none; /* hide default cursor */
-    }
-    a {
-      color: #0ff; /* neon cyan */
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-      text-shadow: 0 0 5px #0ff;
-    }
-    a:hover {
-      color: #0ff;
-      text-shadow: 0 0 20px #0ff;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Eppepally Karthik Raj | Portfolio</title>
 
-    header {
-      background: rgba(0,0,0,0.8);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 0 15px #0ff;
-    }
-    nav {
-      max-width: 1000px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 1rem;
-    }
-    .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #0ff;
-      letter-spacing: 1.5px;
-      user-select: none;
-      text-shadow: 0 0 10px #0ff;
-    }
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-    }
-    .nav-links li a {
-      font-weight: 600;
-      font-size: 1rem;
-      text-shadow: 0 0 5px #0ff;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    /* Laser grid container */
-    #laserGrid {
-      position: fixed;
-      top: 50%; left: 50%;
-      width: 100vw;
-      height: 100vh;
-      transform-style: preserve-3d;
-      pointer-events: none;
-      z-index: -1;
-      transform-origin: center center;
-      will-change: transform;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#000000);
+  background-size:400% 400%;
+  animation:gradientBG 15s ease infinite;
+  color:#fff;
+  scroll-behavior:smooth;
+}
+@keyframes gradientBG{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
 
-    /* Laser lines */
-    .laser-line {
-      position: absolute;
-      background: linear-gradient(
-        90deg,
-        rgba(0,255,255,0) 0%,
-        rgba(0,255,255,0.8) 50%,
-        rgba(0,255,255,0) 100%
-      );
-      filter: drop-shadow(0 0 6px cyan) drop-shadow(0 0 12px cyan);
-    }
-    .laser-line.horizontal {
-      height: 2px;
-      width: 100vw;
-    }
-    .laser-line.vertical {
-      width: 2px;
-      height: 100vh;
-      background: linear-gradient(
-        180deg,
-        rgba(0,255,255,0) 0%,
-        rgba(0,255,255,0.8) 50%,
-        rgba(0,255,255,0) 100%
-      );
-    }
+header{
+  position:fixed;
+  width:100%;
+  top:0;
+  backdrop-filter:blur(10px);
+  background:rgba(0,0,0,0.4);
+  padding:15px 0;
+  z-index:1000;
+}
+nav{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.logo{
+  font-size:1.5rem;
+  font-weight:700;
+  color:#00ffff;
+}
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:25px;
+}
+nav ul li a{
+  text-decoration:none;
+  color:#fff;
+  font-weight:500;
+  transition:.3s;
+}
+nav ul li a:hover{
+  color:#00ffff;
+}
 
-    /* Hero Section */
-    .hero-section {
-      max-width: 900px;
-      margin: 120px auto 80px;
-      text-align: center;
-      padding: 0 1rem;
-      position: relative;
-      z-index: 10;
-      color: #0ff;
-      text-shadow: 0 0 10px #0ff;
-    }
-    .profile-pic {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 4px solid #0ff;
-      box-shadow: 0 0 30px #0ff;
-      margin-bottom: 1rem;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-    .profile-pic:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 50px #0ff;
-    }
-    .hero-section h1 {
-      font-size: 2.8rem;
-      margin-bottom: 0.3rem;
-      user-select: none;
-    }
-    .hero-section p {
-      font-size: 1.3rem;
-      font-weight: 600;
-      min-height: 32px;
-    }
-    #typed-text {
-      border-right: 3px solid #0ff;
-      padding-right: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      display: inline-block;
-      vertical-align: bottom;
-      animation: blinkCursor 0.7s step-end infinite;
-    }
-    @keyframes blinkCursor {
-      50% { border-color: transparent; }
-    }
+section{
+  padding:120px 20px 80px;
+  max-width:1100px;
+  margin:auto;
+}
 
-    /* Sections */
-    section {
-      max-width: 900px;
-      margin: 0 auto 70px;
-      padding: 0 1rem;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-      color: #0ff;
-      text-shadow: 0 0 6px #0ff;
-    }
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    h2 {
-      font-size: 2.4rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      user-select: none;
-    }
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 1rem;
-    }
+.hero{
+  text-align:center;
+  padding-top:150px;
+}
+.hero img{
+  width:170px;
+  border-radius:50%;
+  border:4px solid #00ffff;
+  box-shadow:0 0 25px #00ffff;
+  margin-bottom:20px;
+}
+.hero h1{
+  font-size:2.5rem;
+  margin-bottom:10px;
+}
+.hero span{
+  color:#00ffff;
+  font-weight:600;
+}
 
-    /* Projects */
-    .projects-container {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .project-box {
-      background: rgba(0,255,255,0.05);
-      border: 2px solid #0ff;
-      border-radius: 12px;
-      width: 280px;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 0 10px #0ff;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      user-select: none;
-    }
-    .project-box:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #0ff;
-    }
-    .project-box h3 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .project-box p {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      min-height: 38px;
-    }
-    .project-box a {
-      font-weight: 700;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-      color: #0ff;
-    }
-    .project-box a:hover {
-      color: #66fff9;
-      text-decoration: underline;
-    }
+.btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:10px 25px;
+  background:#00ffff;
+  color:#000;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:600;
+  transition:.3s;
+}
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 20px #00ffff;
+}
 
-    /* Contact */
-    .contact-section form {
-      max-width: 500px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .contact-section input,
-    .contact-section textarea {
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-      resize: vertical;
-      box-shadow: 0 0 8px rgba(0,255,255,0.7);
-      background: rgba(0 0 0 / 0.3);
-      color: #0ff;
-      transition: background 0.3s ease;
-    }
-    .contact-section input::placeholder,
-    .contact-section textarea::placeholder {
-      color: #66fff9;
-    }
-    .contact-section input:focus,
-    .contact-section textarea:focus {
-      outline: none;
-      background: rgba(0 0 0 / 0.5);
-      box-shadow: 0 0 12px #0ff;
-    }
-    .contact-section button {
-      background: #0ff;
-      border: none;
-      padding: 1rem;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: #000;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 15px #0ff;
-    }
-    .contact-section button:hover {
-      background: #33fff9;
-      box-shadow: 0 0 25px #33fff9;
-    }
+h2{
+  text-align:center;
+  margin-bottom:40px;
+  font-size:2rem;
+  color:#00ffff;
+}
 
-    /* Footer */
-    footer {
-      background: rgba(0,0,0,0.8);
-      color: #66fff9;
-      text-align: center;
-      padding: 1.5rem 1rem;
-      box-shadow: 0 -3px 5px rgba(0,255,255,0.3);
-      font-size: 0.9rem;
-      user-select: none;
-    }
-    footer .social-links a {
-      color: #0ff;
-      margin: 0 8px;
-      font-weight: 700;
-      text-shadow: 0 0 5px #0ff;
-    }
-    footer .social-links a:hover {
-      color: #33fff9;
-      text-decoration: underline;
-    }
+.about p{
+  text-align:center;
+  max-width:750px;
+  margin:auto;
+  line-height:1.7;
+  font-size:1.05rem;
+}
 
-    /* Responsive */
-    @media (max-width: 760px) {
-      .projects-container {
-        flex-direction: column;
-        align-items: center;
-      }
-      .project-box {
-        width: 90%;
-      }
-    }
+.projects{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+}
+.card{
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(8px);
+  padding:20px;
+  border-radius:15px;
+  transition:.3s;
+  border:1px solid rgba(0,255,255,0.2);
+}
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 10px 30px rgba(0,255,255,0.4);
+}
+.card h3{
+  margin-bottom:10px;
+  color:#00ffff;
+}
+.card p{
+  font-size:0.95rem;
+  margin-bottom:15px;
+}
+.card a{
+  color:#00ffff;
+  text-decoration:none;
+  font-weight:600;
+}
 
-    /* Typed cursor blinking */
-    @keyframes blinkCursor {
-      50% { border-color: transparent; }
-    }
-
-    /* Custom red laser cursor */
-    .laser-cursor {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 18px;
-      height: 18px;
-      pointer-events: none;
-      z-index: 9999;
-      /* Remove translate(-50%, -50%) to align tip at mouse */
-      transform: rotate(45deg);
-      filter: drop-shadow(0 0 8px #ff0000);
-      animation: pulseGlow 1.5s infinite alternate;
-    }
-    .laser-cursor::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 18px;
-      height: 18px;
-      background: linear-gradient(45deg, #ff0000, #ff6666);
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
-      transform: translate(-50%, -50%);
-      box-shadow:
-        0 0 8px #ff0000,
-        0 0 15px #ff0000,
-        0 0 25px #ff6666;
-    }
-    @keyframes pulseGlow {
-      0% {
-        filter: drop-shadow(0 0 6px #ff0000);
-        opacity: 1;
-      }
-      50% {
-        filter: drop-shadow(0 0 12px #ff3333);
-        opacity: 0.8;
-      }
-      100% {
-        filter: drop-shadow(0 0 6px #ff0000);
-        opacity: 1;
-      }
-    }
-  </style>
+.contact form{
+  max-width:500px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+.contact input,.contact textarea{
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:rgba(255,255,255,0.1);
+  color:#fff;
+}
+.contact button{
+  background:#00ffff;
+  border:none;
+  padding:12px;
+  border-radius:25px;
+  font-weight:600;
+  cursor:pointer;
+}
+footer{
+  text-align:center;
+  padding:20px;
+  background:rgba(0,0,0,0.5);
+}
+footer a{
+  color:#00ffff;
+  margin:0 10px;
+  text-decoration:none;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- Laser grid container -->
-  <div id="laserGrid"></div>
+<header>
+<nav>
+<div class="logo">Eppepally Karthik Raj</div>
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+<li><a href="Karthik_Raj_Resume_ATS.pdf" target="_blank">Resume</a></li>
+<li><a href="certification.pdf" target="_blank">Certificates</a></li>
+</ul>
+</nav>
+</header>
 
-  <header>
-    <nav>
-      <div class="logo">Eppepally Karthik Raj</div>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="Karthik_Raj_Resume_ATS.pdf" target="_blank" rel="noopener noreferrer">Resume</a></li>
-        <li><a href="certification.pdf" target="_blank" rel="noopener noreferrer">Certifications</a></li>
-      </ul>
-    </nav>
-  </header>
+<section class="hero">
+<img src="passport 3.jpg" alt="Profile">
+<h1>Hello, I'm <span>Eppepally Karthik Raj</span></h1>
+<p>Aspiring Full Stack Developer | Machine Learning Enthusiast | Problem Solver</p>
+<a href="#projects" class="btn">View My Work</a>
+</section>
 
-  <section id="hero" class="hero-section">
-    <img src="passport 3.jpg" alt="Your Photo" class="profile-pic" />
-    <h1>Hello, I'm Eppepally Karthik Raj</h1>
-    <p><span id="typed-text"></span></p>
-  </section>
+<section id="about" class="about">
+<h2>About Me</h2>
+<p>
+I am a Computer Science Engineering student passionate about building full-stack web applications and machine learning solutions.
+I have experience in React, FastAPI, MongoDB, and cloud deployment platforms like Vercel and Render.
+I enjoy solving real-world problems through scalable and efficient software systems.
+</p>
+</section>
 
-  <section id="about" class="about-section">
-    <h2>About Me</h2>
-    <p>I am a passionate web developer with a knack for creating elegant and efficient web solutions. I enjoy turning complex problems into simple, beautiful, and intuitive designs. When I'm not coding, you'll find me exploring new technologies, reading tech blogs, or working on side projects.</p>
-  </section>
+<section id="projects">
+<h2>Projects</h2>
+<div class="projects">
 
-  <section id="projects" class="projects-section">
-    <h2>My Projects</h2>
-    <div class="projects-container">
-      <div class="project-box">
-        <h3>Project One</h3>
-        <p>Save the Earth</p>
-        <a href="https://karthik-raj10.github.io/save-earth-website/" target="_blank" rel="noopener noreferrer">View Project</a>
-      </div>
-      <div class="project-box">
-        <h3>Project Two</h3>
-        <p>Tik-Toc-Tik(game)</p>
-        <a href="https://karthik-raj10.github.io/tik-toc-tik-game-/" target="_blank" rel="noopener noreferrer">View Project</a>
-      </div>
-      <div class="project-box">
-        <h3>Project Three</h3>
-        <p>analysis-and-prediction-of-mental-disorder-using-ensemble-learning</p>
-        <a href="https://karthik-raj10.github.io/Analysis-and-Prediction-of-Mental-Disorder-using-Ensemble-Learning/" target="_blank" rel="noopener noreferrer">View Project</a>
-      </div>
-     <div class="project-box">
-        <h3>Project Four</h3>
-        <p>College Resource Planning(CRP)</p>
-        <a href="https://college-crp.vercel.app/" target="_blank" rel="noopener noreferrer">View Project</a>
-      </div>
-    </div>
-  </section>
+<div class="card">
+<h3>LoanAnalyzer Pro</h3>
+<p>ML-powered loan approval prediction system with interactive dashboards.</p>
+<a href="#">View Project</a>
+</div>
 
-  <section id="contact" class="contact-section">
-    <h2>Contact Me</h2>
-    <p>Feel free to reach out if you have any questions or just want to connect!</p>
-    <form>
-      <input type="text" placeholder="Your Name" required />
-      <input type="email" placeholder="Your Email" required />
-      <textarea placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+<div class="card">
+<h3>Mental Health Risk Detection Chat App</h3>
+<p>Flask-based ML app predicting mental health risks using ensemble models.</p>
+<a href="#">View Project</a>
+</div>
 
-  <footer>
-    <p>&copy; 2024 Eppepally Karthik Raj All rights reserved.</p>
-    <div class="social-links">
-      <a href="https://www.linkedin.com/in/karthik-raj-41172b215/" target="_blank" rel="noopener noreferrer">LinkedIn</a> |
-      <a href="https://github.com/karthik-raj10" target="_blank" rel="noopener noreferrer">GitHub</a> |
-      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-    </div>
-  </footer>
+<div class="card">
+<h3>College Resource Portal (CRP)</h3>
+<p>Role-based student & finance management system built with React & Node.js.</p>
+<a href="#">View Project</a>
+</div>
 
-  <!-- Custom laser cursor element -->
-  <div class="laser-cursor"></div>
+<div class="card">
+<h3>Tic Tac Toe Game</h3>
+<p>Interactive web-based game with modern UI and sound effects.</p>
+<a href="#">View Project</a>
+</div>
 
-  <script>
-    // Typed text effect
-    const typedTextSpan = document.getElementById("typed-text");
-    const textArray = [
-      "Aspiring Web Developer",
-      "Creative Designer",
-      "Tech Enthusiast",
-      "Problem Solver",
-      "Lifelong Learner"
-    ];
-    const typingDelay = 100;
-    const erasingDelay = 60;
-    const newTextDelay = 2000;
-    let textArrayIndex = 0;
-    let charIndex = 0;
+</div>
+</section>
 
-    function type() {
-      if (charIndex < textArray[textArrayIndex].length) {
-        typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-        charIndex++;
-        setTimeout(type, typingDelay);
-      } else {
-        setTimeout(erase, newTextDelay);
-      }
-    }
+<section id="contact" class="contact">
+<h2>Contact Me</h2>
+<form>
+<input type="text" placeholder="Your Name" required>
+<input type="email" placeholder="Your Email" required>
+<textarea rows="4" placeholder="Your Message" required></textarea>
+<button type="submit">Send Message</button>
+</form>
+</section>
 
-    function erase() {
-      if (charIndex > 0) {
-        typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-        charIndex--;
-        setTimeout(erase, erasingDelay);
-      } else {
-        textArrayIndex++;
-        if (textArrayIndex >= textArray.length) textArrayIndex = 0;
-        setTimeout(type, typingDelay + 500);
-      }
-    }
+<footer>
+<p>© 2026 Eppepally Karthik Raj. All Rights Reserved.</p>
+<div>
+<a href="https://www.linkedin.com/in/karthik-raj-41172b215/" target="_blank">LinkedIn</a>
+<a href="https://github.com/karthik-raj10" target="_blank">GitHub</a>
+</div>
+</footer>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      if(textArray.length) setTimeout(type, newTextDelay + 250);
-    });
-
-    // Scroll fade-in sections
-    function revealOnScroll() {
-      const sections = document.querySelectorAll("section");
-      const windowHeight = window.innerHeight;
-      const revealPoint = 150;
-      sections.forEach(section => {
-        const sectionTop = section.getBoundingClientRect().top;
-        if(sectionTop < windowHeight - revealPoint) {
-          section.classList.add("visible");
-        }
-      });
-    }
-    window.addEventListener("scroll", revealOnScroll);
-    window.addEventListener("load", revealOnScroll);
-
-    // Laser grid lines creation and animation
-    const laserGrid = document.getElementById('laserGrid');
-    const spacing = 60; // px
-    const horizontalCount = Math.ceil(window.innerHeight / spacing);
-    const verticalCount = Math.ceil(window.innerWidth / spacing);
-
-    // Create horizontal lines
-    for(let i = 0; i <= horizontalCount; i++) {
-      const line = document.createElement('div');
-      line.classList.add('laser-line', 'horizontal');
-      line.style.top = `${i * spacing}px`;
-      laserGrid.appendChild(line);
-    }
-
-    // Create vertical lines
-    for(let i = 0; i <= verticalCount; i++) {
-      const line = document.createElement('div');
-      line.classList.add('laser-line', 'vertical');
-      line.style.left = `${i * spacing}px`;
-      laserGrid.appendChild(line);
-    }
-
-    let angle = 0;
-    function animateLaserGrid() {
-      angle += 0.0025;
-      const rotateX = 20 * Math.sin(angle);
-      const rotateY = 30 * Math.cos(angle);
-      laserGrid.style.transform = `translate(-50%, -50%) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      requestAnimationFrame(animateLaserGrid);
-    }
-    animateLaserGrid();
-
-    // Custom laser cursor follow mouse
-    const laserCursor = document.querySelector('.laser-cursor');
-
-    window.addEventListener('mousemove', e => {
-      // Align laser cursor's top-left corner exactly at the pointer
-      laserCursor.style.left = e.clientX + 'px';
-      laserCursor.style.top = e.clientY + 'px';
-    });
-  </script>
 </body>
 </html>
-
-
-
